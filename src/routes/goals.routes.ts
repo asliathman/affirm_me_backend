@@ -11,14 +11,6 @@ router.get('/', async (req: Request, res: Response) => {
     res.status(200).json({ goals: result });
 });
 
-// GET - goals/:id
-router.get('/:id', async (req: Request, res: Response) => {
-    GoalMap(database);
-    const id = Number(req.params.id);
-    const result = await Goal.findByPk(id);
-    res.status(200).json({ goal: result });
-});
-
 // POST - goals
 // router.post('/', async (req: Request, res: Response) => {
 //     let newGoal = req.body as Goal;
@@ -27,5 +19,17 @@ router.get('/:id', async (req: Request, res: Response) => {
 //     newGoal = result.dataValues as Goal;
 //     res.status(201).json({ goal: newGoal });
 // });
+
+// GET - goals/:id
+router.get('/:id', async (req: Request, res: Response) => {
+    GoalMap(database);
+    const id = Number(req.params.id);
+    const result = await Goal.findByPk(id);
+    res.status(200).json({ goal: result });
+});
+
+// PATCH - goals/:id
+
+// DELETE - goals/:id
 
 export default router;
