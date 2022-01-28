@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { Request, Response } from 'express';
 import { port } from './config';
+import goalsRoutes from './routes/goals.routes';
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,6 +14,8 @@ app.get('/', async (req: Request, res: Response) => {
         message: 'Hello World'
     });
 });
+
+app.use('/goals', goalsRoutes);
 
 const server = http.createServer(app);
 server.listen(port, () => {
