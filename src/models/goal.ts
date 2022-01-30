@@ -33,9 +33,3 @@ export const GoalMap = (sequelize: Sequelize) => {
     Goal.sync();
 }
 
-// export interface GoalModel extends Model{
-//     id?: IntegerDataType;
-//     title: string;
-//     description?: string;
-//     createdAt?: Date;
-// }
