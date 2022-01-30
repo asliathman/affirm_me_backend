@@ -6,7 +6,7 @@ export default class Goal extends Model {
     public description?: string;
     public createdAt?: Date;
 }
-
+// sqlize is the instance of the db connection 
 export const GoalMap = (sequelize: Sequelize) => {
     Goal.init({
         id: {
@@ -32,3 +32,10 @@ export const GoalMap = (sequelize: Sequelize) => {
     });
     Goal.sync();
 }
+
+// export interface GoalModel extends Model{
+//     id?: IntegerDataType;
+//     title: string;
+//     description?: string;
+//     createdAt?: Date;
+// }
