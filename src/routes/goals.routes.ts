@@ -16,7 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
     res.status(200).json({ goals: result });
 });
 
-// POST - goals
+//POST - goals
 // router.post('/', async (req: Request, res: Response) => {
 //     let newGoal = req.body as Goal;
 //     //GoalMap(database);
@@ -53,12 +53,13 @@ router.patch("/:id", async (req: Request, res: Response) => {
         });
         if (updated) {
             const updatedUser = await Goal.findOne({ where: {id: id} }); // find one fixed, the problem, why?
+            
             return res.status(200).json({user: updatedUser});
         }
         throw new Error('User not Found');
     }
-    catch (error) {
-        return res.status(500).send("User not found");
+    catch (error:any) {
+        return res.status(500).send(error.message);
     }
 
 })
