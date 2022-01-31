@@ -64,5 +64,40 @@ router.patch("/:id", async (req: Request, res: Response) => {
 })
 
 // DELETE - goals/:id
+router.delete("/:id", async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    Goal.destroy({
+    where: { id: id }
+    })
+    .then(num => {
+        if (num == 1) {
+        res.send({
+        message: "Goal was deleted successfully!"
+        });
+        } else {
+        res.send({
+            message: "Cannot delete Goal with id=${id}. Maybe Goal was completed!"
+        });
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+        message: "Could not delete Goal with id=" + id
+        });
+    });
+});
+
+
+// router.delete("/:id", async (req: Request, res: Response) => {
+//     try { 
+//         const id: number = parseInt(req.params.id,10);
+//         await Goal.remove(id);
+
+//         res.sendStatus(204);
+//     } catch (errer){
+//         res.status(500).send(Error);
+//     }
+// })
 
 export default router;
