@@ -62,6 +62,7 @@ router.patch("/:id", async (req: Request, res: Response) => {
 })
 
 // DELETE - goals/:id
+// commenting out the else doesnt work because we dont handle logic for when the response is not one but also not an error
 router.delete("/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
 
@@ -77,7 +78,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
         });
         } //else {
         // res.send({
-        //     message: "Cannot delete Goal with id=${id}. Maybe Goal was completed!"
+        //     message: `Cannot delete Goal with id ${id}. Maybe Goal was completed!`
         // });
         // }
     })
