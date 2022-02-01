@@ -16,6 +16,7 @@ export const GoalMap = (sequelize: Sequelize) => {
         },
         title: {
             type: DataTypes.STRING(255)
+            // allowNull: False
         },
         description: {
             type: DataTypes.STRING(255),
