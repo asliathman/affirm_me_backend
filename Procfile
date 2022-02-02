@@ -1,1 +1,1 @@
-web: ntsc -p .
+web: node index.js
