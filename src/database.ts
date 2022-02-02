@@ -8,5 +8,15 @@ export default new Sequelize({
     database: db_name,
     username: db_user,
     password: db_password,
-    ssl: process.env.NODE_ENV==="production"
+    dialectOptions: {
+        ssl: process.env.NODE_ENV==="production"
+    }
+    //ssl: process.env.NODE_ENV==="production"
 });
+
+// export default new Sequelize(process.env.DATABASE_URL, {
+//     dialect: 'postgres',
+//     dialectOptions: {
+//     ssl: process.env.NODE_ENV==="production"
+//     }
+// });
