@@ -1,1 +1,1 @@
-web: npm index.ts
+web: sc -p .
