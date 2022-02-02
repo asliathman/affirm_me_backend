@@ -1,1 +1,1 @@
-web: sc -p .
+web: node dist/index.js
