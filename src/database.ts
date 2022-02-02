@@ -7,6 +7,7 @@ export default new Sequelize({
     port: db_port,
     database: db_name,
     username: db_user,
-    password: db_password
+    password: db_password,
+    ssl: true
 });
 
