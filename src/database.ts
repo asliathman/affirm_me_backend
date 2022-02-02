@@ -8,6 +8,12 @@ export default new Sequelize({
     database: db_name,
     username: db_user,
     password: db_password,
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false 
+        }
+    }
     // dialectOptions: {
     //     ssl: process.env.NODE_ENV==="production"
     // }
