@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { port } from './config';
 import goalsRoutes from './routes/goals.routes';
 
+// do we need Heroku App.json Schema: https://devcenter.heroku.com/articles..
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
