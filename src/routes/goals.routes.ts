@@ -24,13 +24,25 @@ router.get('/', async (req: Request, res: Response) => {
 
 
 
+// router.post('/', async (req: Request, res: Response) => {
+//     let newGoal= req.body;
+//     console.log(`request body returns as: ${newGoal}`);
+//     const result = await Goal.create(req.body);
+//     //console.log(result)
+//     //newGoal = result?.dataValues;
+//     res.status(201).json({ goal: result })
+//     //res.status(201).json({ goal: newGoal });
+// });
+
 router.post('/', async (req: Request, res: Response) => {
-    //let newGoal= req.body;
-    const result = await Goal.create(req.body);
-    console.log(result)
-    //newGoal = result?.dataValues;
-    res.status(201).json({ goal: result })
-    //res.status(201).json({ goal: newGoal });
+    try {
+        const goal = await Goal.create(req.body);
+        return res.status(201).json({
+            goal,
+        });
+    } catch (error:any) {
+        return res.status(500).json({ error: error.message})
+    }
 });
 
 // GET - goals/:id
