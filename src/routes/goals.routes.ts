@@ -27,6 +27,7 @@ router.get('/', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
     //let newGoal= req.body;
     const result = await Goal.create(req.body);
+    console.log(result)
     //newGoal = result?.dataValues;
     res.status(201).json({ goal: result })
     //res.status(201).json({ goal: newGoal });
