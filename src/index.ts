@@ -10,6 +10,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/', async (req: Request, res: Response) => {
+    res.status(200).json({
+        message: 'Hello World'
+    });
+});
 
 app.use('/goals', goalsRoutes);
 
