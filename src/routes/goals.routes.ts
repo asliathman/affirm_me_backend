@@ -17,41 +17,48 @@ const router = Router();
 GoalMap(database)
 // GET - goals
 router.get('/', async (req: Request, res: Response) => {
-    //GoalMap(database);
-    const result = await Goal.findAll();
-    res.status(200).json({ goals: result });
+    try {
+        const result = await Goal.findAll();
+        res.status(200).json({ goals: result });
+    }
+    catch(error:any) {
+        return res.status(500).json(error.message)
+    }
 });
 
 
-
-// router.post('/', async (req: Request, res: Response) => {
-//     let newGoal= req.body;
-//     console.log(`request body returns as: ${newGoal}`);
-//     const result = await Goal.create(req.body);
-//     //console.log(result)
-//     //newGoal = result?.dataValues;
-//     res.status(201).json({ goal: result })
-//     //res.status(201).json({ goal: newGoal });
-// });
-
 router.post('/', async (req: Request, res: Response) => {
+    if (!req.is("application/json")) {
+        return res.status(400).json("Expecting application/json content header");
+    };
     try {
         const goal = await Goal.create(req.body);
         return res.status(201).json({
             goal,
         });
     } catch (error:any) {
-        return res.status(500).json({ error: error.message})
+        return res.status(400).json({ error: error.message})
     }
 });
 
 // GET - goals/:id
 
 router.get('/:id', async (req: Request, res: Response) => {
-    //GoalMap(database);
-    const id = Number(req.params.id);
-    const result = await Goal.findByPk(id);
-    res.status(200).json({ goal: result });
+    
+    try {
+        const id  = Number(req.params.id);
+        const user = await Goal.findByPk(id);
+
+        if (user === null) {
+            return res.status(400).json("User not found");
+        };
+
+        return res.status(200).json({ goal: user });
+    } catch (error:any) {
+        console.log(error) 
+        return res.status(400).send(error.message)
+    }
+    
 });
 
 //PATCH - goals/:id  or should we do put
@@ -62,6 +69,7 @@ router.patch("/:id", async (req: Request, res: Response) => {
             where: {id: id}
         });
         if (updated) {
+            console.log(updated)
             const updatedUser = await Goal.findOne({ where: {id: id} }); 
             
             return res.status(200).json({user: updatedUser});
@@ -75,33 +83,24 @@ router.patch("/:id", async (req: Request, res: Response) => {
 })
 
 // DELETE - goals/:id
-// commenting out the else doesnt work because we dont handle logic for when the response is not one but also not an error
-router.delete("/:id", async (req: Request, res: Response) => {
-    const id = req.params.id;
 
-    Goal.destroy({
-    where: { id: id }
-    })
-    .then(num => {
-        
-        if (num == 1) {
-        console.log(num)
-        res.send({
-        message: "Goal was deleted successfully!"
+
+router.delete("/:id", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const deleted = await Goal.destroy({
+            where: {id: id} 
         });
-        } //else {
-        // res.send({
-        //     message: `Cannot delete Goal with id ${id}. Maybe Goal was completed!`
-        // });
-        // }
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(500).send({
-        message: "Could not delete Goal with id=" + id
-        });
-    });
+        if (deleted) {
+            return res.status(200).send("User deleted");
+        }
+        throw new Error("User not found")
+    } catch (error:any) {
+        return res.status(400).send(error.message)
+    }
 });
+
+
 
 
 export default router;

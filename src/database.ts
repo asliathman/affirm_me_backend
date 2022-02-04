@@ -1,7 +1,7 @@
 import { db_host, db_port, db_name, db_user, db_password } from './config';
 import { Sequelize } from 'sequelize';
 
-// noticed i need ssl and dialiet args 12- 17 to run on heroku but wont work with local
+// need ssl and dialiet args 12- 17 to run on heroku but wont work with local
 export default new Sequelize({
     dialect: "postgres",
     host: db_host,
