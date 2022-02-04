@@ -4,8 +4,8 @@ dotenv.config({
     path: `${__dirname}/../.env`
 });
 
-export const port = Number(process.env.API_PORT);
-
+//export const port = Number(process.env.API_PORT); //for dev
+export const port = Number(process.env.PORT); //for heroku
 export const db_host = String(process.env.DB_HOST);
 export const db_port = Number(process.env.DB_PORT);
 export const db_name = String(process.env.DB_NAME);

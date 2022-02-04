@@ -1,47 +1,64 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response} from 'express';
 import Goal, { GoalMap } from '../models/goal';
 import database from '../database';
-import { Identifier } from 'sequelize/dist';
 
 // create connection once and everyone piggybacks off it 
 // create db connection as a singleton and be able to use it in multiple places 
 // Handle Errors for routes 
+// closing the database when we host?
+
+
+// add error handle for get routes for get routes invalid id not available and if id is not a valid char
+// test for char invalid for all routes 
+// decide on consitent error messages 
+
 const router = Router();
 
 GoalMap(database)
 // GET - goals
 router.get('/', async (req: Request, res: Response) => {
-    //GoalMap(database);
-    const result = await Goal.findAll();
-    res.status(200).json({ goals: result });
+    try {
+        const result = await Goal.findAll();
+        res.status(200).json({ goals: result });
+    }
+    catch(error:any) {
+        return res.status(500).json(error.message)
+    }
 });
-
-// POST - goals
-// router.post('/', async (req: Request, res: Response) => {
-//     let newGoal = req.body as Goal;
-//     //GoalMap(database);
-//     const result = await Goal.create(newGoal);
-//     newGoal = result.dataValues as Goal;
-//     res.status(201).json({ goal: newGoal });
-// });
 
 
 router.post('/', async (req: Request, res: Response) => {
-    //let newGoal= req.body;
-    //GoalMap(database);
-    const result = await Goal.create(req.body);
-    //newGoal = result?.dataValues;
-    res.status(201).json({ goal: result })
-    //res.status(201).json({ goal: newGoal });
+    if (!req.is("application/json")) {
+        return res.status(400).json("Expecting application/json content header");
+    };
+    try {
+        const goal = await Goal.create(req.body);
+        return res.status(201).json({
+            goal,
+        });
+    } catch (error:any) {
+        return res.status(400).json({ error: error.message})
+    }
 });
 
 // GET - goals/:id
-// crashes app if invalid 
+
 router.get('/:id', async (req: Request, res: Response) => {
-    //GoalMap(database);
-    const id = Number(req.params.id);
-    const result = await Goal.findByPk(id);
-    res.status(200).json({ goal: result });
+    
+    try {
+        const id  = Number(req.params.id);
+        const user = await Goal.findByPk(id);
+
+        if (user === null) {
+            return res.status(400).json("User not found");
+        };
+
+        return res.status(200).json({ goal: user });
+    } catch (error:any) {
+        console.log(error) 
+        return res.status(400).send(error.message)
+    }
+    
 });
 
 //PATCH - goals/:id  or should we do put
@@ -52,52 +69,38 @@ router.patch("/:id", async (req: Request, res: Response) => {
             where: {id: id}
         });
         if (updated) {
-            const updatedUser = await Goal.findOne({ where: {id: id} }); // find one fixed, the problem, why?
+            console.log(updated)
+            const updatedUser = await Goal.findOne({ where: {id: id} }); 
+            
             return res.status(200).json({user: updatedUser});
         }
         throw new Error('User not Found');
     }
-    catch (error) {
-        return res.status(500).send("User not found");
+    catch (error:any) {
+        return res.status(500).send(error.message);
     }
 
 })
 
 // DELETE - goals/:id
-router.delete("/:id", async (req: Request, res: Response) => {
-    const id = req.params.id;
 
-    Goal.destroy({
-    where: { id: id }
-    })
-    .then(num => {
-        if (num == 1) {
-        res.send({
-        message: "Goal was deleted successfully!"
+
+router.delete("/:id", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const deleted = await Goal.destroy({
+            where: {id: id} 
         });
-        } else {
-        res.send({
-            message: "Cannot delete Goal with id=${id}. Maybe Goal was completed!"
-        });
+        if (deleted) {
+            return res.status(200).send("User deleted");
         }
-    })
-    .catch(err => {
-        res.status(500).send({
-        message: "Could not delete Goal with id=" + id
-        });
-    });
+        throw new Error("User not found")
+    } catch (error:any) {
+        return res.status(400).send(error.message)
+    }
 });
 
 
-// router.delete("/:id", async (req: Request, res: Response) => {
-//     try { 
-//         const id: number = parseInt(req.params.id,10);
-//         await Goal.remove(id);
 
-//         res.sendStatus(204);
-//     } catch (errer){
-//         res.status(500).send(Error);
-//     }
-// })
 
 export default router;
