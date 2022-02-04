@@ -22,6 +22,7 @@
   "homepage": "https://github.com/asliathman/affirm_me_backend#readme",
   "dependencies": {
     "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
     "pg": "^8.7.1",
