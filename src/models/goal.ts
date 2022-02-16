@@ -4,7 +4,7 @@ export default class Goal extends Model {
     public id?: IntegerDataType;
     public title!: string;
     public description?: string;
-    public createdAt?: Date;
+    public createdAt?: string;
 }
 // sqlize is the instance of the db connection 
 export const GoalMap = (sequelize: Sequelize) => {
@@ -23,7 +23,7 @@ export const GoalMap = (sequelize: Sequelize) => {
             allowNull: true
         },
         createdAt: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING(255),
             allowNull: true
         }
     }, {
